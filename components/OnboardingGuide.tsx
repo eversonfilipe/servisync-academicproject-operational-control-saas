@@ -1,8 +1,13 @@
-
 import React, { useState } from 'react';
 import Modal from './common/Modal';
 import Icon from './common/Icon';
 
+/**
+ * @interface OnboardingGuideProps
+ * @description Defines the props for the OnboardingGuide component.
+ * @property {boolean} isOpen - Controls whether the guide is visible.
+ * @property {() => void} onClose - Function to call when the guide is closed.
+ */
 interface OnboardingGuideProps {
   isOpen: boolean;
   onClose: () => void;
@@ -29,6 +34,11 @@ const guideSteps = [
     title: 'Controle de Estoque',
     content: 'Gerencie as peças e produtos mais importantes do seu negócio. Saiba quando é hora de comprar mais e evite surpresas.'
   },
+   {
+    icon: 'database',
+    title: 'Seus Dados, Seu Controle',
+    content: 'Exporte todos os seus dados para um arquivo JSON a qualquer momento para ter um backup. Importe o arquivo para restaurar suas informações.'
+  },
   {
     icon: 'checkCircle',
     title: 'Tudo pronto!',
@@ -36,6 +46,12 @@ const guideSteps = [
   }
 ];
 
+/**
+ * Renders a step-by-step onboarding guide for new users.
+ * This guide is shown the first time a user opens the application.
+ * @param {OnboardingGuideProps} props - The props for the component.
+ * @returns {JSX.Element | null} The rendered OnboardingGuide component or null if not open.
+ */
 const OnboardingGuide: React.FC<OnboardingGuideProps> = ({ isOpen, onClose }) => {
   const [currentStep, setCurrentStep] = useState(0);
 
@@ -46,6 +62,7 @@ const OnboardingGuide: React.FC<OnboardingGuideProps> = ({ isOpen, onClose }) =>
   const step = guideSteps[currentStep];
   const isLastStep = currentStep === guideSteps.length - 1;
 
+  /** Moves to the next step or closes the guide if it's the last step. */
   const handleNext = () => {
     if (!isLastStep) {
       setCurrentStep(prev => prev + 1);
@@ -54,6 +71,7 @@ const OnboardingGuide: React.FC<OnboardingGuideProps> = ({ isOpen, onClose }) =>
     }
   };
 
+  /** Moves to the previous step. */
   const handlePrev = () => {
     if (currentStep > 0) {
       setCurrentStep(prev => prev - 1);
@@ -83,14 +101,14 @@ const OnboardingGuide: React.FC<OnboardingGuideProps> = ({ isOpen, onClose }) =>
         </div>
 
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
-            {currentStep > 0 && !isLastStep ? (
+            {currentStep > 0 ? (
                  <button 
                     onClick={handlePrev} 
                     className="w-full sm:w-auto text-gray-600 font-medium py-2 px-4 rounded-md hover:bg-gray-100 transition-colors"
                 >
                     Anterior
                 </button>
-            ) : <div className="hidden sm:block sm:w-auto" /> /* Placeholder */}
+            ) : <div className="hidden sm:block sm:w-auto" /> /* Placeholder to keep layout consistent */}
            
             <button 
                 onClick={handleNext}

@@ -1,13 +1,26 @@
 import React from 'react';
 
+/**
+ * @interface CardProps
+ * @description Defines the props for the Card component.
+ * @property {React.ReactNode} children - The content to be displayed inside the card.
+ * @property {string} [className] - Optional additional CSS classes to apply to the card container.
+ * @property {string} [title] - An optional title to display in the card's header.
+ * @property {() => void} [onClick] - An optional function to handle clicks on the card.
+ */
 interface CardProps {
   children: React.ReactNode;
   className?: string;
   title?: string;
-  // FIX: Added onClick prop to allow Card to be clickable.
   onClick?: () => void;
 }
 
+/**
+ * Renders a styled card component for displaying content sections.
+ * It can optionally have a title and a click handler.
+ * @param {CardProps} props - The props for the component.
+ * @returns {JSX.Element} The rendered Card component.
+ */
 const Card: React.FC<CardProps> = ({ children, className = '', title, onClick }) => {
   return (
     <div className={`bg-white rounded-lg shadow-md border border-gray-200 ${className}`} onClick={onClick}>

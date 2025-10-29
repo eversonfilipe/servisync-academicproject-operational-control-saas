@@ -5,7 +5,22 @@ import Modal from './common/Modal';
 import { InventoryItem } from '../types';
 import { useAppContext } from '../context/AppContext';
 
-const InventoryForm: React.FC<{ item?: InventoryItem | null; onSave: (item: any) => void; onCancel: () => void }> = ({ item, onSave, onCancel }) => {
+/**
+ * @interface InventoryFormProps
+ * @description Defines props for the InventoryForm component.
+ */
+interface InventoryFormProps {
+    item?: InventoryItem | null;
+    onSave: (item: any) => void;
+    onCancel: () => void;
+}
+
+/**
+ * Renders a form for creating or editing an inventory item.
+ * @param {InventoryFormProps} props - The props for the component.
+ * @returns {JSX.Element} The rendered form.
+ */
+const InventoryForm: React.FC<InventoryFormProps> = ({ item, onSave, onCancel }) => {
   const [name, setName] = useState(item?.name || '');
   const [quantity, setQuantity] = useState(item?.quantity || 0);
   const [lowStockThreshold, setLowStockThreshold] = useState(item?.lowStockThreshold || 0);
@@ -45,22 +60,35 @@ const InventoryForm: React.FC<{ item?: InventoryItem | null; onSave: (item: any)
   );
 };
 
-
+/**
+ * Renders the inventory management page.
+ * It displays a list of inventory items and provides functionality to add and edit them.
+ * @returns {JSX.Element} The rendered Inventory page component.
+ */
 const Inventory: React.FC = () => {
   const { inventory, actions, isLoading } = useAppContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<InventoryItem | null>(null);
 
+  /**
+   * Opens the modal to add or edit an inventory item.
+   * @param {InventoryItem | null} [item=null] - The item to edit, or null to add a new one.
+   */
   const handleOpenModal = (item: InventoryItem | null = null) => {
     setEditingItem(item);
     setIsModalOpen(true);
   };
 
+  /** Closes the inventory form modal. */
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setEditingItem(null);
   };
 
+  /**
+   * Saves inventory item data from the form.
+   * @param {InventoryItem} itemData - The item data from the form.
+   */
   const handleSave = (itemData: InventoryItem) => {
     if (itemData.id) {
       actions.updateItem(itemData);
@@ -120,7 +148,7 @@ const Inventory: React.FC = () => {
                    )}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <button onClick={() => handleOpenModal(item)} className="text-blue-600 hover:text-blue-900">
+                  <button onClick={() => handleOpenModal(item)} className="text-blue-600 hover:text-blue-900" aria-label={`Edit ${item.name}`}>
                     <Icon name="edit" className="w-5 h-5" />
                   </button>
                 </td>

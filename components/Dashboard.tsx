@@ -5,10 +5,20 @@ import { OrderStatus } from '../types';
 import type { View } from '../App';
 import { useAppContext } from '../context/AppContext';
 
+/**
+ * @interface DashboardProps
+ * @description Defines the props for the Dashboard component.
+ * @property {(view: View) => void} setView - Function to change the current application view.
+ */
 interface DashboardProps {
   setView: (view: View) => void;
 }
 
+/**
+ * Renders a statistic card for the dashboard.
+ * @param {object} props - The component props.
+ * @returns {JSX.Element} The rendered StatCard component.
+ */
 const StatCard: React.FC<{ title: string; value: string | number; icon: string; iconBgColor: string; onClick?: () => void }> = ({ title, value, icon, iconBgColor, onClick }) => (
   <Card className={`hover:shadow-lg transition-shadow ${onClick ? 'cursor-pointer' : ''}`} onClick={onClick}>
     <div className="flex items-center">
@@ -23,6 +33,10 @@ const StatCard: React.FC<{ title: string; value: string | number; icon: string; 
   </Card>
 );
 
+/**
+ * Renders a skeleton loading state for the Dashboard.
+ * @returns {JSX.Element} The loading skeleton UI.
+ */
 const LoadingSkeleton: React.FC = () => (
     <div className="space-y-6 animate-pulse">
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -38,8 +52,14 @@ const LoadingSkeleton: React.FC = () => (
     </div>
 );
 
-
+/**
+ * Renders the main dashboard of the application.
+ * It displays key metrics, charts, and recent activity.
+ * @param {DashboardProps} props - The props for the component.
+ * @returns {JSX.Element} The rendered Dashboard component.
+ */
 const Dashboard: React.FC<DashboardProps> = ({ setView }) => {
+  // Dynamically load Recharts from the window object
   const { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } = (window as any).Recharts || {};
   
   const { orders, clients, inventory, isLoading } = useAppContext();
@@ -48,6 +68,7 @@ const Dashboard: React.FC<DashboardProps> = ({ setView }) => {
     return <LoadingSkeleton />;
   }
 
+  // Calculate statistics from context data
   const openOrders = orders.filter(o => o.status === OrderStatus.Open).length;
   const inProgressOrders = orders.filter(o => o.status === OrderStatus.InProgress).length;
   const lowStockItems = inventory.filter(i => i.quantity <= i.lowStockThreshold).length;

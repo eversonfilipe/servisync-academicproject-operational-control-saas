@@ -5,13 +5,24 @@ import Modal from './common/Modal';
 import { ServiceOrder, OrderStatus, Client, InventoryItem, PartUsage } from '../types';
 import { useAppContext } from '../context/AppContext';
 
-const ServiceOrderForm: React.FC<{
+/**
+ * @interface ServiceOrderFormProps
+ * @description Defines props for the ServiceOrderForm component.
+ */
+interface ServiceOrderFormProps {
   order?: ServiceOrder | null;
   clients: Client[];
   inventory: InventoryItem[];
   onSave: (order: any) => void;
   onCancel: () => void;
-}> = ({ order, clients, inventory, onSave, onCancel }) => {
+}
+
+/**
+ * Renders a form for creating or editing a service order.
+ * @param {ServiceOrderFormProps} props - The props for the component.
+ * @returns {JSX.Element} The rendered form.
+ */
+const ServiceOrderForm: React.FC<ServiceOrderFormProps> = ({ order, clients, inventory, onSave, onCancel }) => {
   const [clientId, setClientId] = useState(order?.client.id || '');
   const [equipment, setEquipment] = useState(order?.equipment || '');
   const [issueDescription, setIssueDescription] = useState(order?.issueDescription || '');
@@ -28,6 +39,7 @@ const ServiceOrderForm: React.FC<{
     return inventory.filter(i => !usedIds.has(i.id));
   }, [inventory, partsUsed]);
 
+  /** Handles adding a selected part to the service order. */
   const handleAddPart = () => {
     const partToAdd = inventory.find(i => i.id === selectedPartId);
     if (!partToAdd || partQuantity <= 0) {
@@ -35,7 +47,7 @@ const ServiceOrderForm: React.FC<{
         return;
     }
     
-    // Check against available stock, considering parts already in the form
+    // Check against available stock
     const originalStock = inventory.find(i => i.id === partToAdd.id)?.quantity || 0;
     if (originalStock < partQuantity) {
         setError(`Estoque insuficiente. Disponível: ${originalStock}`);
@@ -48,10 +60,15 @@ const ServiceOrderForm: React.FC<{
     setError('');
   };
 
+  /**
+   * Handles removing a part from the service order.
+   * @param {string} itemId - The ID of the item to remove.
+   */
   const handleRemovePart = (itemId: string) => {
     setPartsUsed(partsUsed.filter(p => p.itemId !== itemId));
   };
 
+  /** Handles the form submission. */
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const client = clients.find(c => c.id === clientId);
@@ -88,7 +105,7 @@ const ServiceOrderForm: React.FC<{
                         <p className="text-sm font-medium">{part.name}</p>
                         <p className="text-xs text-gray-500">Quantidade: {part.quantityUsed}</p>
                     </div>
-                    <button type="button" onClick={() => handleRemovePart(part.itemId)} className="text-red-500 hover:text-red-700">
+                    <button type="button" onClick={() => handleRemovePart(part.itemId)} className="text-red-500 hover:text-red-700" aria-label={`Remove ${part.name}`}>
                         <Icon name="x" className="w-4 h-4" />
                     </button>
                 </div>
@@ -129,7 +146,13 @@ const ServiceOrderForm: React.FC<{
   );
 };
 
-
+/**
+ * Renders a compact card for a single service order.
+ * @param {object} props - Component props.
+ * @param {ServiceOrder} props.order - The service order to display.
+ * @param {(order: ServiceOrder) => void} props.onEdit - Callback to edit the order.
+ * @returns {JSX.Element} The rendered OrderCard.
+ */
 const OrderCard: React.FC<{ order: ServiceOrder; onEdit: (order: ServiceOrder) => void }> = ({ order, onEdit }) => (
     <Card className="mb-4">
         <div className="flex justify-between items-start">
@@ -138,7 +161,7 @@ const OrderCard: React.FC<{ order: ServiceOrder; onEdit: (order: ServiceOrder) =
                 <p className="text-sm text-gray-600">{order.client.name}</p>
                 <p className="text-xs text-gray-400 mt-1">OS #{order.id.split('-')[1]}</p>
             </div>
-            <button onClick={() => onEdit(order)} className="text-gray-400 hover:text-blue-600">
+            <button onClick={() => onEdit(order)} className="text-gray-400 hover:text-blue-600" aria-label={`Edit order ${order.id}`}>
                 <Icon name="edit" className="w-4 h-4" />
             </button>
         </div>
@@ -157,19 +180,34 @@ const OrderCard: React.FC<{ order: ServiceOrder; onEdit: (order: ServiceOrder) =
     </Card>
 );
 
+/**
+ * Renders the service order management page, displaying orders in a Kanban-style board.
+ * @returns {JSX.Element} The rendered ServiceOrders page component.
+ */
 const ServiceOrders: React.FC = () => {
   const { orders, clients, inventory, actions, isLoading } = useAppContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingOrder, setEditingOrder] = useState<ServiceOrder | null>(null);
 
+  /**
+   * Opens the modal to add or edit a service order.
+   * @param {ServiceOrder | null} [order=null] - The order to edit, or null to add a new one.
+   */
   const handleOpenModal = (order: ServiceOrder | null = null) => {
     setEditingOrder(order);
     setIsModalOpen(true);
   };
+  
+  /** Closes the service order form modal. */
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setEditingOrder(null);
   };
+
+  /**
+   * Saves service order data from the form.
+   * @param {ServiceOrder} orderData - The order data from the form.
+   */
   const handleSave = (orderData: ServiceOrder) => {
     if (orderData.id) {
       actions.updateOrder(orderData);
@@ -179,6 +217,7 @@ const ServiceOrders: React.FC = () => {
     handleCloseModal();
   };
 
+  // Group orders by status for Kanban columns
   const columns: { title: OrderStatus; orders: ServiceOrder[]; color: string }[] = [
     { title: OrderStatus.Open, orders: orders.filter(o => o.status === OrderStatus.Open), color: 'amber' },
     { title: OrderStatus.InProgress, orders: orders.filter(o => o.status === OrderStatus.InProgress), color: 'blue' },
@@ -209,7 +248,7 @@ const ServiceOrders: React.FC = () => {
               </h3>
               <div className="min-h-[200px]">
                 {col.orders.length > 0 ? 
-                  col.orders.map(order => <OrderCard key={order.id} order={order} onEdit={handleOpenModal} />)
+                  col.orders.sort((a,b) => b.updatedAt.getTime() - a.updatedAt.getTime()).map(order => <OrderCard key={order.id} order={order} onEdit={handleOpenModal} />)
                   : <p className="text-center text-sm text-gray-500 pt-10">Nenhuma ordem aqui.</p>
                 }
               </div>

@@ -1,7 +1,15 @@
-
 import React, { useEffect } from 'react';
 import Icon from './Icon';
 
+/**
+ * @interface ModalProps
+ * @description Defines the props for the Modal component.
+ * @property {boolean} isOpen - Controls whether the modal is visible.
+ * @property {() => void} onClose - Function to call when the modal should be closed.
+ * @property {string} title - The title displayed in the modal's header.
+ * @property {React.ReactNode} children - The content to be rendered inside the modal's body.
+ * @property {React.ReactNode} [footer] - Optional content to be rendered in the modal's footer.
+ */
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -10,6 +18,12 @@ interface ModalProps {
   footer?: React.ReactNode;
 }
 
+/**
+ * Renders a generic modal dialog.
+ * It includes accessibility features like closing on 'Escape' key press and focus trapping.
+ * @param {ModalProps} props - The props for the component.
+ * @returns {JSX.Element | null} The rendered Modal component or null if not open.
+ */
 const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children, footer }) => {
   useEffect(() => {
     const handleEsc = (event: KeyboardEvent) => {
@@ -36,6 +50,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children, footer 
             type="button"
             className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
             onClick={onClose}
+            aria-label="Close modal"
           >
             <Icon name="x" className="w-5 h-5" />
           </button>
@@ -44,7 +59,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children, footer 
           {children}
         </div>
         {footer && (
-          <div className="flex items-center p-6 space-x-2 rounded-b border-t border-gray-200">
+          <div className="p-6 pt-4 rounded-b border-t border-gray-200">
             {footer}
           </div>
         )}

@@ -5,7 +5,25 @@ import Modal from './common/Modal';
 import { Client } from '../types';
 import { useAppContext } from '../context/AppContext';
 
-const ClientForm: React.FC<{ client?: Client | null; onSave: (client: any) => void; onCancel: () => void }> = ({ client, onSave, onCancel }) => {
+/**
+ * @interface ClientFormProps
+ * @description Defines props for the ClientForm component.
+ * @property {Client | null} [client] - The client data to edit, or null for a new client.
+ * @property {(client: any) => void} onSave - Callback function when the form is submitted.
+ * @property {() => void} onCancel - Callback function to cancel the form.
+ */
+interface ClientFormProps {
+    client?: Client | null;
+    onSave: (client: any) => void;
+    onCancel: () => void;
+}
+
+/**
+ * Renders a form for creating or editing a client.
+ * @param {ClientFormProps} props - The props for the component.
+ * @returns {JSX.Element} The rendered form.
+ */
+const ClientForm: React.FC<ClientFormProps> = ({ client, onSave, onCancel }) => {
   const [name, setName] = useState(client?.name || '');
   const [phone, setPhone] = useState(client?.phone || '');
   const [email, setEmail] = useState(client?.email || '');
@@ -43,21 +61,36 @@ const ClientForm: React.FC<{ client?: Client | null; onSave: (client: any) => vo
   );
 };
 
+/**
+ * Renders the client management page.
+ * It displays a list of clients and provides functionality to add and edit them.
+ * @returns {JSX.Element} The rendered Clients page component.
+ */
 const Clients: React.FC = () => {
   const { clients, actions, isLoading } = useAppContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingClient, setEditingClient] = useState<Client | null>(null);
 
+  /**
+   * Opens the modal to add or edit a client.
+   * @param {Client | null} [client=null] - The client to edit, or null to add a new one.
+   */
   const handleOpenModal = (client: Client | null = null) => {
     setEditingClient(client);
     setIsModalOpen(true);
   };
 
+  /** Closes the client form modal. */
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setEditingClient(null);
   };
 
+  /**
+   * Saves client data from the form.
+   * It either updates an existing client or adds a new one.
+   * @param {Client} clientData - The client data from the form.
+   */
   const handleSave = (clientData: Client) => {
     if (clientData.id) {
       actions.updateClient(clientData);
@@ -108,7 +141,7 @@ const Clients: React.FC = () => {
                   {new Date(client.createdAt).toLocaleDateString('pt-BR')}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <button onClick={() => handleOpenModal(client)} className="text-blue-600 hover:text-blue-900">
+                  <button onClick={() => handleOpenModal(client)} className="text-blue-600 hover:text-blue-900" aria-label={`Edit ${client.name}`}>
                     <Icon name="edit" className="w-5 h-5" />
                   </button>
                 </td>
