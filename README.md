@@ -1,10 +1,9 @@
-
 # ServiSync - Gestão Simplificada para Microempresas
 
-![Badge](https://img.shields.io/badge/Projeto-Acad%C3%AAmico-blue)
-![Badge](https://img.shields.io/badge/Linguagem-C-blue.svg)
-![Badge](https://img.shields.io/badge/UI-React%20/%20TypeScript-cyan.svg)
-![Badge](https://img.shields.io/badge/Status-MVP-green)
+![Badge](https://img-shields.io/badge/Projeto-Acad%C3%AAmico-blue)
+![Badge](https://img-shields.io/badge/Linguagem-C-blue.svg)
+![Badge](https://img-shields.io/badge/UI-React%20/%20TypeScript-cyan.svg)
+![Badge](https://img-shields.io/badge/Status-MVP-green)
 
 ---
 
@@ -13,8 +12,8 @@
 ## Sumário
 
 - [Visão Geral](#visão-geral)
-- [Funcionalidades Principais](#funcionalidades-principais)
-- [Público-Alvo](#público-alvo)
+- [Hipótese Central](#hipótese-central)
+- [Funcionalidades Principais (MVP)](#funcionalidades-principais-mvp)
 - [Metodologia Aplicada](#metodologia-aplicada)
 - [Estrutura Tecnológica](#estrutura-tecnológica)
 - [Como Executar](#como-executar)
@@ -22,47 +21,45 @@
 
 ## Visão Geral
 
-**ServiSync** é um MVP (Mínimo Produto Viável) acadêmico, desenvolvido como projeto para a disciplina de Estrutura de Dados em C. A plataforma foi concebida para atender às necessidades de microempresas brasileiras no setor de serviços técnicos, oferecendo uma solução de gestão integrada e baseada na nuvem. O objetivo principal é centralizar e simplificar o controle operacional, permitindo que os gestores foquem no crescimento do negócio.
+**ServiSync** é um MVP (Mínimo Produto Viável) acadêmico, desenvolvido como projeto para a disciplina de Estrutura de Dados em C. A plataforma foi concebida para resolver a fragmentação sistêmica enfrentada por microempresas brasileiras no setor de serviços técnicos, oferecendo uma solução de gestão integrada que promete a recuperação do controle operacional em 4 a 8 semanas.
 
-## Funcionalidades Principais
+## Hipótese Central
 
-- **Painel de Controle (Dashboard):** Visualização rápida e intuitiva dos principais indicadores do negócio, como ordens de serviço abertas, concluídas e em andamento.
-- **Gestão de Clientes:** Cadastro centralizado de clientes, com fácil acesso a informações de contato e histórico.
-- **Ordens de Serviço (OS):** Criação, acompanhamento e gestão do ciclo de vida das OS, desde a abertura até a conclusão.
-- **Controle de Estoque:** Gerenciamento básico de peças e materiais, com alertas de estoque baixo para evitar interrupções no serviço.
+> "Se fornecermos um sistema simples de gestão integrada que unifique controle de clientes, serviços e inventário, então microempresas de serviços técnicos recuperarão controle operacional e reduzirão sobrecarga em 4-8 semanas, validando que integração é a solução para fragmentação."
 
-## Público-Alvo
+## Funcionalidades Principais (MVP)
 
-O projeto foca em microempreendedores e técnicos autônomos do setor de serviços (assistência técnica, manutenção, etc.) no Brasil, que atualmente utilizam métodos manuais ou planilhas descentralizadas para gerir suas operações.
+O escopo do MVP foi definido para entregar valor imediato e validar a hipótese central, cobrindo 78.8% das necessidades operacionais identificadas:
+
+1.  **Cadastro Unificado de Clientes:** Cria uma fonte única de verdade para os dados dos clientes.
+2.  **Gestão de Ordens de Serviço (OS):** Permite criar e acompanhar o status (Aberta, Em Andamento, Concluída) de todas as OS em tempo real.
+3.  **Controle de Inventário Básico:** Gerenciamento de entrada e saída das peças mais críticas.
+4.  **Vinculação Cliente-Equipamento-Peças:** Cria um histórico completo e integrado de cada serviço.
+5.  **Dashboard Operacional:** Oferece uma visão geral dos principais indicadores em uma única tela.
+6.  **Aplicação Web Responsiva:** Garante acesso via desktop e dispositivos móveis (Cloud-based).
 
 ## Metodologia Aplicada
 
-O desenvolvimento do ServiSync seguiu um rigoroso processo híbrido que une práticas acadêmicas, corporativas e de Lean Startup, garantindo que a solução seja fundamentada em problemas reais e validada de forma estruturada. As principais etapas foram:
-
-1.  **Revisão Sistemática de Literatura:** Análise de estudos sobre os desafios de gestão enfrentados por microempresas.
-2.  **Shallow & Deep Definition:** Definição progressiva do problema, da solução e do público-alvo, aprofundando o entendimento da causa-raiz das dificuldades operacionais.
-3.  **VVE-M (Validação, Viabilidade e Metas):** Definição do escopo do MVP, análise de riscos e estabelecimento de OKRs (Objectives and Key Results) para guiar o desenvolvimento.
-4.  **Validação Empírica:** Formulação e teste de hipóteses sobre a utilidade das funcionalidades propostas.
-5.  **Decomposição Ágil:** Estruturação do trabalho em Épicos, Features e User Stories para um desenvolvimento iterativo e focado em valor.
+O desenvolvimento do ServiSync seguiu um processo rigoroso e híbrido, validado cientificamente. A metodologia uniu Revisão Sistemática de Literatura, definição aprofundada de problema/solução (Deep-Definition) e um processo completo de **VVE-M (Validação de Viabilidade e Estruturação de Metas)**. Esta abordagem garantiu que a solução fosse fundamentada em problemas reais, com escopo de MVP, riscos e metas claramente definidos antes do desenvolvimento.
 
 Para um detalhamento completo do processo, consulte o [Documento de Discovery](./docs/DISCOVERY.md).
 
 ## Estrutura Tecnológica
 
--   **Backend (Lógica Central):** A lógica de manipulação dos dados foi modelada e implementada em **C**, utilizando estruturas de dados como listas encadeadas para gerenciar clientes, inventário e ordens de serviço.
+-   **Backend (Lógica Central):** A lógica de manipulação dos dados foi modelada e implementada em **C**, utilizando estruturas de dados como listas encadeadas para gerenciar clientes, inventário e ordens de serviço. Os arquivos estão em `src/core`.
 -   **Frontend (Interface do Usuário):** A interface web foi construída com **React** e **TypeScript**, oferecendo uma experiência de usuário moderna, responsiva e interativa.
 
 ## Como Executar
 
 O projeto possui duas partes distintas:
 
-1.  **Interface Web:** Pode ser executada em um ambiente de desenvolvimento web padrão. Sirva o arquivo `index.html` e suas dependências.
-2.  **Core em C:** Os arquivos `main.c` e `datastructures.h` na pasta `src/core` podem ser compilados utilizando um compilador C (como o GCC).
+1.  **Interface Web:** Pode ser executada em um ambiente de desenvolvimento web padrão, servindo o arquivo `index.html`.
+2.  **Core em C:** Os arquivos na pasta `src/core` podem ser compilados e executados para testar a lógica de base.
     ```bash
     # Navegue até a pasta src/core
     cd src/core
 
-    # Compile o programa
+    # Compile o programa (usando GCC como exemplo)
     gcc main.c -o servisync_core
 
     # Execute o programa no terminal
@@ -71,22 +68,22 @@ O projeto possui duas partes distintas:
 
 ## Licença
 
-Este projeto é distribuído sob a licença MIT. Veja o arquivo `LICENSE` para mais detalhes.
+Este projeto é distribuído sob a licença MIT.
 
 ---
 
 # ServiSync - Simplified Management for Microenterprises
 
-![Badge](https://img.shields.io/badge/Project-Academic-blue)
-![Badge](https://img.shields.io/badge/Language-C-blue.svg)
-![Badge](https://img.shields.io/badge/UI-React%20/%20TypeScript-cyan.svg)
-![Badge](https://img.shields.io/badge/Status-MVP-green)
+![Badge](https://img-shields.io/badge/Project-Academic-blue)
+![Badge](https://img-shields.io/badge/Language-C-blue.svg)
+![Badge](https://img-shields.io/badge/UI-React%20/%20TypeScript-cyan.svg)
+![Badge](https://img-shields.io/badge/Status-MVP-green)
 
 ## Table of Contents
 
 - [Overview](#overview)
-- [Key Features](#key-features)
-- [Target Audience](#target-audience)
+- [Central Hypothesis](#central-hypothesis)
+- [Key Features (MVP)](#key-features-mvp)
 - [Applied Methodology](#applied-methodology)
 - [Technological Structure](#technological-structure)
 - [How to Run](#how-to-run)
@@ -94,47 +91,45 @@ Este projeto é distribuído sob a licença MIT. Veja o arquivo `LICENSE` para m
 
 ## Overview
 
-**ServiSync** is an academic MVP (Minimum Viable Product), developed as a project for a Data Structures in C course. The platform is designed to meet the needs of Brazilian microenterprises in the technical services sector, offering an integrated, cloud-based management solution. The main objective is to centralize and simplify operational control, allowing managers to focus on business growth.
+**ServiSync** is an academic MVP (Minimum Viable Product), developed as a project for a Data Structures in C course. The platform is designed to solve the systemic fragmentation faced by Brazilian microenterprises in the technical services sector, offering an integrated management solution that promises to restore operational control within 4 to 8 weeks.
 
-## Key Features
+## Central Hypothesis
 
-- **Dashboard:** Quick and intuitive visualization of key business indicators, such as open, completed, and in-progress service orders.
-- **Client Management:** Centralized client registry with easy access to contact information and history.
-- **Service Orders (SO):** Creation, tracking, and management of the SO lifecycle, from opening to completion.
-- **Inventory Control:** Basic management of parts and materials, with low-stock alerts to prevent service interruptions.
+> "If we provide a simple integrated management system that unifies client, service, and inventory control, then technical service microenterprises will regain operational control and reduce overhead within 4-8 weeks, validating that integration is the solution to fragmentation."
 
-## Target Audience
+## Key Features (MVP)
 
-The project targets micro-entrepreneurs and freelance technicians in the service sector (technical assistance, maintenance, etc.) in Brazil, who currently use manual methods or decentralized spreadsheets to manage their operations.
+The MVP scope was defined to deliver immediate value and validate the central hypothesis, covering 78.8% of identified operational needs:
+
+1.  **Unified Client Registry:** Creates a single source of truth for customer data.
+2.  **Service Order (SO) Management:** Allows creating and tracking the status (Open, In Progress, Completed) of all SOs in real-time.
+3.  **Basic Inventory Control:** Manages the input and output of the most critical parts.
+4.  **Client-Equipment-Parts Linking:** Creates a complete and integrated history for each service.
+5.  **Operational Dashboard:** Provides an overview of key indicators on a single screen.
+6.  **Responsive Web Application:** Ensures access via desktop and mobile devices (Cloud-based).
 
 ## Applied Methodology
 
-The development of ServiSync followed a rigorous hybrid process that blends academic, corporate, and Lean Startup practices, ensuring the solution is grounded in real problems and structurally validated. The main stages were:
+ServiSync's development followed a rigorous and scientifically validated hybrid process. The methodology combined a Systematic Literature Review, in-depth problem/solution definition (Deep-Definition), and a comprehensive **VVE-M (Validation, Viability, and Goal Setting)** process. This approach ensured the solution was grounded in real-world problems, with a clearly defined MVP scope, risks, and goals before development began.
 
-1.  **Systematic Literature Review:** Analysis of studies on the management challenges faced by microenterprises.
-2.  **Shallow & Deep Definition:** Progressive definition of the problem, solution, and target audience, deepening the understanding of the root cause of operational difficulties.
-3.  **VVE-M (Validation, Viability, and Goals):** Definition of the MVP scope, risk analysis, and establishment of OKRs (Objectives and Key Results) to guide development.
-4.  **Empirical Validation:** Formulation and testing of hypotheses regarding the utility of the proposed features.
-5.  **Agile Decomposition:** Structuring the work into Epics, Features, and User Stories for iterative, value-focused development.
-
-For a complete breakdown of the process, please see the [Discovery Document](./docs/DISCOVERY.md).
+For a complete breakdown of the process, see the [Discovery Document](./docs/DISCOVERY.md).
 
 ## Technological Structure
 
--   **Backend (Core Logic):** The data manipulation logic was modeled and implemented in **C**, using data structures like linked lists to manage clients, inventory, and service orders.
+-   **Backend (Core Logic):** The data manipulation logic was modeled and implemented in **C**, using data structures like linked lists to manage clients, inventory, and service orders. The files are located in `src/core`.
 -   **Frontend (User Interface):** The web interface was built with **React** and **TypeScript**, providing a modern, responsive, and interactive user experience.
 
 ## How to Run
 
 The project has two distinct parts:
 
-1.  **Web Interface:** Can be run in a standard web development environment. Serve the `index.html` file and its dependencies.
-2.  **Core in C:** The `main.c` and `datastructures.h` files in the `src/core` folder can be compiled using a C compiler (like GCC).
+1.  **Web Interface:** Can be run in a standard web development environment by serving the `index.html` file.
+2.  **Core in C:** The files in the `src/core` folder can be compiled and run to test the core logic.
     ```bash
     # Navigate to the src/core folder
     cd src/core
 
-    # Compile the program
+    # Compile the program (using GCC as an example)
     gcc main.c -o servisync_core
 
     # Run the program in the terminal
@@ -143,4 +138,4 @@ The project has two distinct parts:
 
 ## License
 
-This project is distributed under the MIT license. See the `LICENSE` file for more details.
+This project is distributed under the MIT license.
