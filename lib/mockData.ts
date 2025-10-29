@@ -28,7 +28,8 @@ export const MOCK_ORDERS: ServiceOrder[] = [
     equipment: 'Notebook Dell Inspiron 15',
     issueDescription: 'Não liga, sem sinal de energia.',
     status: OrderStatus.InProgress,
-    partsUsed: [MOCK_INVENTORY[2]],
+    // FIX: Corrected type to match PartUsage. Assumed quantityUsed is 1.
+    partsUsed: [{ itemId: MOCK_INVENTORY[2].id, name: MOCK_INVENTORY[2].name, quantityUsed: 1 }],
     createdAt: twoDaysAgo,
     updatedAt: yesterday,
   },
@@ -48,7 +49,11 @@ export const MOCK_ORDERS: ServiceOrder[] = [
     equipment: 'Notebook Acer Aspire 5',
     issueDescription: 'Upgrade de SSD e memória RAM.',
     status: OrderStatus.Completed,
-    partsUsed: [MOCK_INVENTORY[0], MOCK_INVENTORY[1]],
+    // FIX: Corrected type to match PartUsage. Assumed quantityUsed is 1 for each part.
+    partsUsed: [
+      { itemId: MOCK_INVENTORY[0].id, name: MOCK_INVENTORY[0].name, quantityUsed: 1 },
+      { itemId: MOCK_INVENTORY[1].id, name: MOCK_INVENTORY[1].name, quantityUsed: 1 }
+    ],
     createdAt: twoDaysAgo,
     updatedAt: twoDaysAgo,
   },

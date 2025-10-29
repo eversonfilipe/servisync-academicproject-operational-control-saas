@@ -20,13 +20,19 @@ export interface InventoryItem {
   lowStockThreshold: number;
 }
 
+export interface PartUsage {
+  itemId: string;
+  name: string;
+  quantityUsed: number;
+}
+
 export interface ServiceOrder {
   id: string;
   client: Client;
   equipment: string;
   issueDescription: string;
   status: OrderStatus;
-  partsUsed: InventoryItem[];
+  partsUsed: PartUsage[];
   createdAt: Date;
   updatedAt: Date;
 }
