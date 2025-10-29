@@ -1,10 +1,9 @@
-
 import React, { useState, useMemo } from 'react';
 import Card from './common/Card';
 import Icon from './common/Icon';
 import Modal from './common/Modal';
 import { ServiceOrder, OrderStatus, Client, InventoryItem, PartUsage } from '../types';
-import { AppData } from '../hooks/useMockData';
+import { useAppContext } from '../context/AppContext';
 
 const ServiceOrderForm: React.FC<{
   order?: ServiceOrder | null;
@@ -36,8 +35,10 @@ const ServiceOrderForm: React.FC<{
         return;
     }
     
-    if (partToAdd.quantity < partQuantity) {
-        setError(`Estoque insuficiente. Disponível: ${partToAdd.quantity}`);
+    // Check against available stock, considering parts already in the form
+    const originalStock = inventory.find(i => i.id === partToAdd.id)?.quantity || 0;
+    if (originalStock < partQuantity) {
+        setError(`Estoque insuficiente. Disponível: ${originalStock}`);
         return;
     }
 
@@ -151,13 +152,13 @@ const OrderCard: React.FC<{ order: ServiceOrder; onEdit: (order: ServiceOrder) =
             </div>
         )}
         <div className="text-xs text-gray-500 mt-3 text-right">
-            Atualizado em: {order.updatedAt.toLocaleDateString('pt-BR')}
+            Atualizado em: {new Date(order.updatedAt).toLocaleDateString('pt-BR')}
         </div>
     </Card>
 );
 
-const ServiceOrders: React.FC<{ data: AppData }> = ({ data }) => {
-  const { orders, clients, inventory, actions } = data;
+const ServiceOrders: React.FC = () => {
+  const { orders, clients, inventory, actions, isLoading } = useAppContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingOrder, setEditingOrder] = useState<ServiceOrder | null>(null);
 
@@ -197,21 +198,25 @@ const ServiceOrders: React.FC<{ data: AppData }> = ({ data }) => {
         </button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {columns.map(col => (
-          <div key={col.title} className="bg-gray-100 rounded-lg p-4">
-            <h3 className={`font-semibold text-lg mb-4 text-${col.color}-600 border-b-2 border-${col.color}-500 pb-2`}>
-              {col.title} ({col.orders.length})
-            </h3>
-            <div className="min-h-[200px]">
-              {col.orders.length > 0 ? 
-                col.orders.map(order => <OrderCard key={order.id} order={order} onEdit={handleOpenModal} />)
-                : <p className="text-center text-sm text-gray-500 pt-10">Nenhuma ordem aqui.</p>
-              }
+      {isLoading ? (
+        <div className="text-center py-10">Carregando ordens...</div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {columns.map(col => (
+            <div key={col.title} className="bg-gray-100 rounded-lg p-4">
+              <h3 className={`font-semibold text-lg mb-4 text-${col.color}-600 border-b-2 border-${col.color}-500 pb-2`}>
+                {col.title} ({col.orders.length})
+              </h3>
+              <div className="min-h-[200px]">
+                {col.orders.length > 0 ? 
+                  col.orders.map(order => <OrderCard key={order.id} order={order} onEdit={handleOpenModal} />)
+                  : <p className="text-center text-sm text-gray-500 pt-10">Nenhuma ordem aqui.</p>
+                }
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
       
        <Modal isOpen={isModalOpen} onClose={handleCloseModal} title={editingOrder ? 'Editar Ordem de Serviço' : 'Nova Ordem de Serviço'}>
         <ServiceOrderForm order={editingOrder} clients={clients} inventory={inventory} onSave={handleSave} onCancel={handleCloseModal} />

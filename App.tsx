@@ -1,21 +1,19 @@
-
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Header from './components/Header';
 import Dashboard from './components/Dashboard';
 import Clients from './components/Clients';
 import ServiceOrders from './components/ServiceOrders';
 import Inventory from './components/Inventory';
-import { useAppData } from './hooks/useMockData';
 import OnboardingGuide from './components/OnboardingGuide';
+import { AppProvider } from './context/AppContext';
 
 export type View = 'dashboard' | 'orders' | 'clients' | 'inventory';
 
-const App: React.FC = () => {
+const AppContent: React.FC = () => {
   const [currentView, setCurrentView] = useState<View>('dashboard');
-  const data = useAppData();
   const [showGuide, setShowGuide] = useState(false);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const guideShown = localStorage.getItem('servisync-guide-shown');
     if (!guideShown) {
       setShowGuide(true);
@@ -30,15 +28,15 @@ const App: React.FC = () => {
   const renderView = () => {
     switch (currentView) {
       case 'dashboard':
-        return <Dashboard data={data} setView={setCurrentView} />;
+        return <Dashboard setView={setCurrentView} />;
       case 'orders':
-        return <ServiceOrders data={data} />;
+        return <ServiceOrders />;
       case 'clients':
-        return <Clients data={data} />;
+        return <Clients />;
       case 'inventory':
-        return <Inventory data={data} />;
+        return <Inventory />;
       default:
-        return <Dashboard data={data} setView={setCurrentView} />;
+        return <Dashboard setView={setCurrentView} />;
     }
   };
 
@@ -50,6 +48,15 @@ const App: React.FC = () => {
       </main>
       <OnboardingGuide isOpen={showGuide} onClose={handleCloseGuide} />
     </div>
+  );
+}
+
+
+const App: React.FC = () => {
+  return (
+    <AppProvider>
+      <AppContent />
+    </AppProvider>
   );
 };
 

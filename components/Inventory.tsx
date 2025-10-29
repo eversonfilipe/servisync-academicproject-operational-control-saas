@@ -1,10 +1,9 @@
-
 import React, { useState } from 'react';
 import Card from './common/Card';
 import Icon from './common/Icon';
 import Modal from './common/Modal';
 import { InventoryItem } from '../types';
-import { AppData } from '../hooks/useMockData';
+import { useAppContext } from '../context/AppContext';
 
 const InventoryForm: React.FC<{ item?: InventoryItem | null; onSave: (item: any) => void; onCancel: () => void }> = ({ item, onSave, onCancel }) => {
   const [name, setName] = useState(item?.name || '');
@@ -47,8 +46,8 @@ const InventoryForm: React.FC<{ item?: InventoryItem | null; onSave: (item: any)
 };
 
 
-const Inventory: React.FC<{ data: AppData }> = ({ data }) => {
-  const { inventory, actions } = data;
+const Inventory: React.FC = () => {
+  const { inventory, actions, isLoading } = useAppContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<InventoryItem | null>(null);
 
@@ -97,7 +96,9 @@ const Inventory: React.FC<{ data: AppData }> = ({ data }) => {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {inventory.length > 0 ? inventory.map((item) => {
+            {isLoading ? (
+                <tr><td colSpan={4} className="text-center py-10">Carregando estoque...</td></tr>
+            ) : inventory.length > 0 ? inventory.map((item) => {
               const isLowStock = item.quantity <= item.lowStockThreshold;
               return (
               <tr key={item.id} className="hover:bg-gray-50">

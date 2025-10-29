@@ -1,13 +1,11 @@
-
 import React from 'react';
 import Card from './common/Card';
 import Icon from './common/Icon';
 import { OrderStatus } from '../types';
-import { AppData } from '../hooks/useMockData';
 import type { View } from '../App';
+import { useAppContext } from '../context/AppContext';
 
 interface DashboardProps {
-  data: AppData;
   setView: (view: View) => void;
 }
 
@@ -25,10 +23,30 @@ const StatCard: React.FC<{ title: string; value: string | number; icon: string; 
   </Card>
 );
 
-const Dashboard: React.FC<DashboardProps> = ({ data, setView }) => {
+const LoadingSkeleton: React.FC = () => (
+    <div className="space-y-6 animate-pulse">
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="h-24 bg-gray-200 rounded-lg"></div>
+            <div className="h-24 bg-gray-200 rounded-lg"></div>
+            <div className="h-24 bg-gray-200 rounded-lg"></div>
+            <div className="h-24 bg-gray-200 rounded-lg"></div>
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-2 h-80 bg-gray-200 rounded-lg"></div>
+            <div className="h-80 bg-gray-200 rounded-lg"></div>
+        </div>
+    </div>
+);
+
+
+const Dashboard: React.FC<DashboardProps> = ({ setView }) => {
   const { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } = (window as any).Recharts || {};
   
-  const { orders, clients, inventory } = data;
+  const { orders, clients, inventory, isLoading } = useAppContext();
+
+  if (isLoading) {
+    return <LoadingSkeleton />;
+  }
 
   const openOrders = orders.filter(o => o.status === OrderStatus.Open).length;
   const inProgressOrders = orders.filter(o => o.status === OrderStatus.InProgress).length;

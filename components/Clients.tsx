@@ -1,10 +1,9 @@
-
 import React, { useState } from 'react';
 import Card from './common/Card';
 import Icon from './common/Icon';
 import Modal from './common/Modal';
 import { Client } from '../types';
-import { AppData } from '../hooks/useMockData';
+import { useAppContext } from '../context/AppContext';
 
 const ClientForm: React.FC<{ client?: Client | null; onSave: (client: any) => void; onCancel: () => void }> = ({ client, onSave, onCancel }) => {
   const [name, setName] = useState(client?.name || '');
@@ -44,8 +43,8 @@ const ClientForm: React.FC<{ client?: Client | null; onSave: (client: any) => vo
   );
 };
 
-const Clients: React.FC<{ data: AppData }> = ({ data }) => {
-  const { clients, actions } = data;
+const Clients: React.FC = () => {
+  const { clients, actions, isLoading } = useAppContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingClient, setEditingClient] = useState<Client | null>(null);
 
@@ -94,7 +93,9 @@ const Clients: React.FC<{ data: AppData }> = ({ data }) => {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {clients.length > 0 ? clients.map((client) => (
+            {isLoading ? (
+                <tr><td colSpan={4} className="text-center py-10">Carregando clientes...</td></tr>
+            ) : clients.length > 0 ? clients.map((client) => (
               <tr key={client.id} className="hover:bg-gray-50">
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm font-medium text-gray-900">{client.name}</div>
@@ -104,7 +105,7 @@ const Clients: React.FC<{ data: AppData }> = ({ data }) => {
                   <div className="text-sm text-gray-500">{client.email}</div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {client.createdAt.toLocaleDateString('pt-BR')}
+                  {new Date(client.createdAt).toLocaleDateString('pt-BR')}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                   <button onClick={() => handleOpenModal(client)} className="text-blue-600 hover:text-blue-900">
